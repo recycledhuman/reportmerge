@@ -11,6 +11,9 @@ QUARTERLY="/Users/$WHO/Desktop/reportmerge/courseandteacher.csv"
 HOLDING="/Users/$WHO/Desktop/reportmerge/holding.txt"
 FINAL="/Users/$WHO/Desktop/reportmerge/final.csv"
 HEADER=$(sed -n 1p $WEEKLY | cut -d, -f1,2,3,4,5,9,11)
+YEAR="$(Date +"%Y")"
+FIRSTSEM="grep -v 1/22/20"
+SECONDSEM="grep 1/22/20"
 
 #Provide appropriate permissions to weekly file
 chmod 755 $WEEKLY
@@ -19,9 +22,9 @@ chmod 755 $WEEKLY
 touch $HOLDING
 echo "$HEADER,\"Course\",\"Teacher\"" >> $HOLDING
 
-#Set Function - find course and teachers and match it with student data
+#Set Functions - find course and teachers and match it with student data
 
-getWeeklyNames ()
+getFirstSemWeeklyNames ()
 {
 NAMES=`(grep -v "Status /Comments" "$WEEKLY" | awk -F'\"' '{print $10;}')`
 for ScannedName in $NAMES
@@ -34,9 +37,9 @@ for ScannedName in $NAMES
 		SIXTHVISIT=$(grep "$ScannedName" "$WEEKLY" | sed -n 6p | cut -d, -f1,2,3,4,5,9,11)
 		if [ "$FIRSTVISIT" != "" ]
 			then
-				FIRSTCOURSE=$(grep "$ScannedName" "$QUARTERLY" | sed -n 1p | cut -d, -f1,6)
-				SECONDCOURSE=$(grep "$ScannedName" "$QUARTERLY" | sed -n 2p | cut -d, -f1,6)
-				THIRDCOURSE=$(grep "$ScannedName" "$QUARTERLY" | sed -n 3p | cut -d, -f1,6)
+				FIRSTCOURSE=$(grep "$ScannedName" "$QUARTERLY" | grep -v "1/22/20" | sed -n 1p | cut -d, -f1,6)
+				SECONDCOURSE=$(grep "$ScannedName" "$QUARTERLY" | grep -v "1/22/20" | sed -n 2p | cut -d, -f1,6)
+				THIRDCOURSE=$(grep "$ScannedName" "$QUARTERLY" | grep -v "1/22/20" | sed -n 3p | cut -d, -f1,6)
 					if [ "$FIRSTCOURSE" != "" ]
 						then
 							echo "$FIRSTVISIT,$FIRSTCOURSE\"" >> $HOLDING
@@ -51,9 +54,9 @@ for ScannedName in $NAMES
 					fi
 				if [ "$SECONDVISIT" != "" ]
 					then
-                                		FIRSTCOURSE=$(grep "$ScannedName" "$QUARTERLY" | sed -n 1p | cut -d, -f1,6)
-                                		SECONDCOURSE=$(grep "$ScannedName" "$QUARTERLY" | sed -n 2p | cut -d, -f1,6)
-                               			THIRDCOURSE=$(grep "$ScannedName" "$QUARTERLY" | sed -n 3p | cut -d, -f1,6)
+                                		FIRSTCOURSE=$(grep "$ScannedName" "$QUARTERLY" | grep -v "1/22/20" | sed -n 1p | cut -d, -f1,6)
+                                		SECONDCOURSE=$(grep "$ScannedName" "$QUARTERLY" | grep -v "1/22/20" | sed -n 2p | cut -d, -f1,6)
+                               			THIRDCOURSE=$(grep "$ScannedName" "$QUARTERLY" | grep -v "1/22/20" | sed -n 3p | cut -d, -f1,6)
                                        			if [ "$FIRSTCOURSE" != "" ]
                                                 		then
                                                         		echo "$SECONDVISIT,$FIRSTCOURSE\"" >> $HOLDING
@@ -68,9 +71,9 @@ for ScannedName in $NAMES
                                         	fi
 					 if [ "$THIRDVISIT" != "" ]
                                         	then
-                                        		FIRSTCOURSE=$(grep "$ScannedName" "$QUARTERLY" | sed -n 1p | cut -d, -f1,6)
-                                        		SECONDCOURSE=$(grep "$ScannedName" "$QUARTERLY" | sed -n 2p | cut -d, -f1,6)
-                                        		THIRDCOURSE=$(grep "$ScannedName" "$QUARTERLY" | sed -n 3p | cut -d, -f1,6)
+                                        		FIRSTCOURSE=$(grep "$ScannedName" "$QUARTERLY" | grep -v "1/22/20" | sed -n 1p | cut -d, -f1,6)
+                                        		SECONDCOURSE=$(grep "$ScannedName" "$QUARTERLY" | grep -v "1/22/20" | sed -n 2p | cut -d, -f1,6)
+                                        		THIRDCOURSE=$(grep "$ScannedName" "$QUARTERLY" | grep -v "1/22/20" | sed -n 3p | cut -d, -f1,6)
                                                 		if [ "$FIRSTCOURSE" != "" ]
                                                         		then
                                                                 		echo "$THIRDVISIT,$FIRSTCOURSE\"" >> $HOLDING
@@ -85,9 +88,9 @@ for ScannedName in $NAMES
                                                 		fi
  						if [ "$FOURTHVISIT" != "" ]
                                         		then
-                                        			FIRSTCOURSE=$(grep "$ScannedName" "$QUARTERLY" | sed -n 1p | cut -d, -f1,6)
-                                        			SECONDCOURSE=$(grep "$ScannedName" "$QUARTERLY" | sed -n 2p | cut -d, -f1,6)
-                                        			THIRDCOURSE=$(grep "$ScannedName" "$QUARTERLY" | sed -n 3p | cut -d, -f1,6)
+                                        			FIRSTCOURSE=$(grep "$ScannedName" "$QUARTERLY" | grep -v "1/22/20" | sed -n 1p | cut -d, -f1,6)
+                                        			SECONDCOURSE=$(grep "$ScannedName" "$QUARTERLY" | grep -v "1/22/20" | sed -n 2p | cut -d, -f1,6)
+                                        			THIRDCOURSE=$(grep "$ScannedName" "$QUARTERLY" | grep -v "1/22/20" | sed -n 3p | cut -d, -f1,6)
                                                 			if [ "$FIRSTCOURSE" != "" ]
                                                         			then
                                                                 			echo "$FOURTHVISIT,$FIRSTCOURSE\"" >> $HOLDING
@@ -102,9 +105,9 @@ for ScannedName in $NAMES
                                                 			fi 
 							if [ "$FIFTHVISIT" != "" ]
                                         			then
-                                        				FIRSTCOURSE=$(grep "$ScannedName" "$QUARTERLY" | sed -n 1p | cut -d, -f1,6)
-                                        				SECONDCOURSE=$(grep "$ScannedName" "$QUARTERLY" | sed -n 2p | cut -d, -f1,6)
-                                        				THIRDCOURSE=$(grep "$ScannedName" "$QUARTERLY" | sed -n 3p | cut -d, -f1,6)
+                                        				FIRSTCOURSE=$(grep "$ScannedName" "$QUARTERLY" | grep -v "1/22/20" | sed -n 1p | cut -d, -f1,6)
+                                        				SECONDCOURSE=$(grep "$ScannedName" "$QUARTERLY" | grep -v "1/22/20" | sed -n 2p | cut -d, -f1,6)
+                                        				THIRDCOURSE=$(grep "$ScannedName" "$QUARTERLY" | grep -v "1/22/20" | sed -n 3p | cut -d, -f1,6)
                                                 				if [ "$FIRSTCOURSE" != "" ]
                                                         				then
                                                                 				echo "$FIFTHVISIT,$FIRSTCOURSE\"" >> $HOLDING
@@ -119,9 +122,9 @@ for ScannedName in $NAMES
                                                 				fi 
 								if [ "$SIXTHVISIT" != "" ]
                                         				then
-                                        					FIRSTCOURSE=$(grep "$ScannedName" "$QUARTERLY" | sed -n 1p | cut -d, -f1,6)
-                                        					SECONDCOURSE=$(grep "$ScannedName" "$QUARTERLY" | sed -n 2p | cut -d, -f1,6)
-                                        					THIRDCOURSE=$(grep "$ScannedName" "$QUARTERLY" | sed -n 3p | cut -d, -f1,6)
+                                        					FIRSTCOURSE=$(grep "$ScannedName" "$QUARTERLY" | grep -v "1/22/20" | sed -n 1p | cut -d, -f1,6)
+                                        					SECONDCOURSE=$(grep "$ScannedName" "$QUARTERLY" | grep -v "1/22/20" | sed -n 2p | cut -d, -f1,6)
+                                        					THIRDCOURSE=$(grep "$ScannedName" "$QUARTERLY" | grep -v "1/22/20" | sed -n 3p | cut -d, -f1,6)
                                                 					if [ "$FIRSTCOURSE" != "" ]
                                                         					then
                                                                 					echo "$SIXTHVISIT,$FIRSTCOURSE\"" >> $HOLDING
@@ -143,8 +146,136 @@ for ScannedName in $NAMES
 	done
 }
 
+getSecondSemWeeklyNames ()
+{
+NAMES=`(grep -v "Status /Comments" "$WEEKLY" | awk -F'\"' '{print $10;}')`
+for ScannedName in $NAMES
+	do
+		FIRSTVISIT=$(grep "$ScannedName" "$WEEKLY" | sed -n 1p | cut -d, -f1,2,3,4,5,9,11)
+		SECONDVISIT=$(grep "$ScannedName" "$WEEKLY" | sed -n 2p | cut -d, -f1,2,3,4,5,9,11)
+		THIRDVISIT=$(grep "$ScannedName" "$WEEKLY" | sed -n 3p | cut -d, -f1,2,3,4,5,9,11)
+		FOURTHVISIT=$(grep "$ScannedName" "$WEEKLY" | sed -n 4p | cut -d, -f1,2,3,4,5,9,11)
+		FIFTHVISIT=$(grep "$ScannedName" "$WEEKLY" | sed -n 5p | cut -d, -f1,2,3,4,5,9,11)
+		SIXTHVISIT=$(grep "$ScannedName" "$WEEKLY" | sed -n 6p | cut -d, -f1,2,3,4,5,9,11)
+		if [ "$FIRSTVISIT" != "" ]
+			then
+				FIRSTCOURSE=$(grep "$ScannedName" "$QUARTERLY" | grep "1/22/20" | sed -n 1p | cut -d, -f1,6)
+				SECONDCOURSE=$(grep "$ScannedName" "$QUARTERLY" | grep "1/22/20" | sed -n 2p | cut -d, -f1,6)
+				THIRDCOURSE=$(grep "$ScannedName" "$QUARTERLY" | grep "1/22/20" | sed -n 3p | cut -d, -f1,6)
+					if [ "$FIRSTCOURSE" != "" ]
+						then
+							echo "$FIRSTVISIT,$FIRSTCOURSE\"" >> $HOLDING
+								if [ "$SECONDCOURSE" != "" ]
+									then
+										echo "$FIRSTVISIT,$SECONDCOURSE\"" >> $HOLDING
+											if [ "$THIRDCOURSE" != "" ]
+												then
+													echo "$FIRSTVISIT,$THIRDCOURSE\"" >> $HOLDING
+											fi
+								fi
+					fi
+				if [ "$SECONDVISIT" != "" ]
+					then
+                                		FIRSTCOURSE=$(grep "$ScannedName" "$QUARTERLY" | grep "1/22/20" | sed -n 1p | cut -d, -f1,6)
+                                		SECONDCOURSE=$(grep "$ScannedName" "$QUARTERLY" | grep "1/22/20" | sed -n 2p | cut -d, -f1,6)
+                               			THIRDCOURSE=$(grep "$ScannedName" "$QUARTERLY" | grep "1/22/20" | sed -n 3p | cut -d, -f1,6)
+                                       			if [ "$FIRSTCOURSE" != "" ]
+                                                		then
+                                                        		echo "$SECONDVISIT,$FIRSTCOURSE\"" >> $HOLDING
+                                                                		if [ "$SECONDCOURSE" != "" ]
+                                                                        		then
+                                                                                		echo "$SECONDVISIT,$SECONDCOURSE\"" >> $HOLDING
+                                                                                        		if [ "$THIRDCOURSE" != "" ]
+                                                                                                		then
+                                                                                                        		echo "$SECONDVISIT,$THIRDCOURSE\"" >> $HOLDING
+                                                                                        	fi
+                                                                	fi
+                                        	fi
+					 if [ "$THIRDVISIT" != "" ]
+                                        	then
+                                        		FIRSTCOURSE=$(grep "$ScannedName" "$QUARTERLY" | grep "1/22/20" | sed -n 1p | cut -d, -f1,6)
+                                        		SECONDCOURSE=$(grep "$ScannedName" "$QUARTERLY" | grep "1/22/20" | sed -n 2p | cut -d, -f1,6)
+                                        		THIRDCOURSE=$(grep "$ScannedName" "$QUARTERLY" | grep "1/22/20" | sed -n 3p | cut -d, -f1,6)
+                                                		if [ "$FIRSTCOURSE" != "" ]
+                                                        		then
+                                                                		echo "$THIRDVISIT,$FIRSTCOURSE\"" >> $HOLDING
+                                                                        		if [ "$SECONDCOURSE" != "" ]
+                                                                                		then
+                                                                                        		echo "$THIRDVISIT,$SECONDCOURSE\"" >> $HOLDING
+                                                                                                		if [ "$THIRDCOURSE" != "" ]
+                                                                                                        		then
+                                                                                                                		echo "$THIRDVISIT,$THIRDCOURSE\"" >> $HOLDING
+                                                                                                		fi
+                                                                        		fi
+                                                		fi
+ 						if [ "$FOURTHVISIT" != "" ]
+                                        		then
+                                        			FIRSTCOURSE=$(grep "$ScannedName" "$QUARTERLY" | grep "1/22/20" | sed -n 1p | cut -d, -f1,6)
+                                        			SECONDCOURSE=$(grep "$ScannedName" "$QUARTERLY" | grep "1/22/20" | sed -n 2p | cut -d, -f1,6)
+                                        			THIRDCOURSE=$(grep "$ScannedName" "$QUARTERLY" | grep "1/22/20" | sed -n 3p | cut -d, -f1,6)
+                                                			if [ "$FIRSTCOURSE" != "" ]
+                                                        			then
+                                                                			echo "$FOURTHVISIT,$FIRSTCOURSE\"" >> $HOLDING
+                                                                        			if [ "$SECONDCOURSE" != "" ]
+                                                                                			then
+                                                                                        			echo "$FOURTHVISIT,$SECONDCOURSE\"" >> $HOLDING
+                                                                                                			if [ "$THIRDCOURSE" != "" ]
+                                                                                                        			then
+                                                                                                                			echo "$FOURTHVISIT,$THIRDCOURSE\"" >> $HOLDING
+                                                                                                			fi
+                                                                        			fi
+                                                			fi 
+							if [ "$FIFTHVISIT" != "" ]
+                                        			then
+                                        				FIRSTCOURSE=$(grep "$ScannedName" "$QUARTERLY" | grep "1/22/20" | sed -n 1p | cut -d, -f1,6)
+                                        				SECONDCOURSE=$(grep "$ScannedName" "$QUARTERLY" | grep "1/22/20" | sed -n 2p | cut -d, -f1,6)
+                                        				THIRDCOURSE=$(grep "$ScannedName" "$QUARTERLY" | grep "1/22/20" | sed -n 3p | cut -d, -f1,6)
+                                                				if [ "$FIRSTCOURSE" != "" ]
+                                                        				then
+                                                                				echo "$FIFTHVISIT,$FIRSTCOURSE\"" >> $HOLDING
+                                                                        				if [ "$SECONDCOURSE" != "" ]
+                                                                                				then
+                                                                                        				echo "$FIFTHVISIT,$SECONDCOURSE\"" >> $HOLDING
+                                                                                                				if [ "$THIRDCOURSE" != "" ]
+                                                                                                        				then
+                                                                                                                				echo "$FIFTHVISIT,$THIRDCOURSE\"" >> $HOLDING
+                                                                                                				fi
+                                                                        				fi
+                                                				fi 
+								if [ "$SIXTHVISIT" != "" ]
+                                        				then
+                                        					FIRSTCOURSE=$(grep "$ScannedName" "$QUARTERLY" | grep "1/22/20" | sed -n 1p | cut -d, -f1,6)
+                                        					SECONDCOURSE=$(grep "$ScannedName" "$QUARTERLY" | grep "1/22/20" | sed -n 2p | cut -d, -f1,6)
+                                        					THIRDCOURSE=$(grep "$ScannedName" "$QUARTERLY" | grep "1/22/20" | sed -n 3p | cut -d, -f1,6)
+                                                					if [ "$FIRSTCOURSE" != "" ]
+                                                        					then
+                                                                					echo "$SIXTHVISIT,$FIRSTCOURSE\"" >> $HOLDING
+                                                                        					if [ "$SECONDCOURSE" != "" ]
+                                                                                					then
+                                                                                        					echo "$SIXTHVISIT,$SECONDCOURSE\"" >> $HOLDING
+                                                                                                					if [ "$THIRDCOURSE" != "" ]
+                                                                                                        					then
+                                                                                                                					echo "$SIXTHVISIT,$THIRDCOURSE\"" >> $HOLDING
+                                                                                                					fi
+                                                                        					fi
+                                                					fi
+								fi
+							fi
+						fi
+					fi
+				fi
+			fi
+	done
+}
+
+
 #Run Function
-getWeeklyNames
+if [ "$YEAR" == "2019" ]
+	then
+		getFirstSemWeeklyNames
+			else
+				getSecondSemWeeklyNames
+fi
 
 #Create final.csv
 touch $FINAL
