@@ -42,6 +42,7 @@ IV. Takeaways: Learned to use text files to manage variables in loops, learned I
 V. Questions: What is the best method to provide a public readme?
 
 VI. Troubleshooting: 
+
 A. All Final documents are blank
   1. Resolution: Ensure the required documents and folders are in the right place and have the right name
     a. e-hallpass.csv is in ~/Desktop/reportmerge; courseandteacher.csv is in ~/Desktop/reportmerge
