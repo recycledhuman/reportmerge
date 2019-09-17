@@ -29,7 +29,7 @@ COURSEJUNK="/Users/$WHO/Desktop/reportmerge/coursejunk.txt"
 STUJUNK="/Users/$WHO/Desktop/reportmerge/stujunk.txt"
 STARTYEAR=2019
 DEBUG="/Users/$WHO/Desktop/reportmerge/debug-$LOGFILE"
-SIZE=$(ls -l /var/log/$LOGFILE.log | awk '{print $5;}')
+SIZE=$(ls -l /var/log/$LOGFILE | awk '{print $5;}')
 MAXSIZE=5000
 IFS=$'\n'
 
