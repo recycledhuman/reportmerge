@@ -28,6 +28,9 @@ JUNKFILE="/Users/$WHO/Desktop/reportmerge/junkfile.txt"
 COURSEJUNK="/Users/$WHO/Desktop/reportmerge/coursejunk.txt"
 STUJUNK="/Users/$WHO/Desktop/reportmerge/stujunk.txt"
 STARTYEAR=2019
+DEBUG="/Users/$WHO/Desktop/reportmerge/debug-$LOGFILE"
+SIZE=$(ls -l /var/log/$LOGFILE.log | awk '{print $5;}')
+MAXSIZE=5000
 IFS=$'\n'
 
 #Provide appropriate permissions to weekly file
@@ -35,7 +38,19 @@ chmod 755 $WEEKLY
 
 #Set up logs
 touch /var/log/$LOGFILE
-echo "####Starting Document Merge - $NOW####" >> /var/log/$LOGFILE
+echo "Logfile size = $SIZE - Checking" >> /var/log/"$LOGFILE"
+if [ "$SIZE" -ge "$MAXSIZE" ]
+	then
+		echo "File cleared - Proceed" >> /var/log/"$LOGFILE"
+		rm -rf /var/log/"$LOGFILE"
+	else
+		echo "File size is sufficient - Proceed" >> /var/log/"$LOGFILE"
+fi
+
+echo "----Starting Script $SCRIPT - $NOW----" >> /var/log/$LOGFILE
+
+#Output WHO variable for error logging
+echo "User = $WHO" >> /var/log/"$LOGFILE"
 
 #Check for documents
 if [ -f "$WEEKLY" ]
@@ -77,11 +92,14 @@ touch $SEMJUNK
 for ScannedName in $NAMES
 	do
 		echo "$ScannedName" >> $SEMJUNK
+#		echo "DEBUG: \$ScannedName is $ScannedName" >> $DEBUG
 		EMAIL=$(sed -n 1p $SEMJUNK | awk -F'\"' '{print $10;}')
+#		echo "DEBUG: \$EMAIL is $EMAIL" >> $DEBUG
 		DATA=$(sed -n 1p $SEMJUNK)
 		REASONTIME=$(grep "$DATA" "$WEEKLY" | cut -d, -f9,11)
 		rm -rf $SEMJUNK 
 		FIRSTCOURSE=$(grep $EMAIL $QUARTERLY | grep -v $CUTOFF | sed -n 1p | cut -d, -f1,6)
+#		echo "DEBUG: \$FIRSTCOURSE is $FIRSTCOURSE" >> $DEBUG
 		SECONDCOURSE=$(grep "$EMAIL" "$QUARTERLY" | grep -v $CUTOFF | sed -n 2p | cut -d, -f1,6)
 		THIRDCOURSE=$(grep "$EMAIL" "$QUARTERLY" | grep -v $CUTOFF | sed -n 3p | cut -d, -f1,6)
 		FOURTHCOURSE=$(grep "$EMAIL" "$QUARTERLY" | grep -v $CUTOFF | sed -n 4p | cut -d, -f1,6)
@@ -111,11 +129,14 @@ touch $SECSEMJUNK
 for SecondScannedName in $SECONDNAMES
 	do
 		echo "$SecondScannedName" >> "$SECSEMJUNK"
+#               echo "DEBUG: \$SecondScannedName is $SecondScannedName" >> $DEBUG
                 SECONDEMAIL=$(sed -n 1p "$SECSEMJUNK" | awk -F'\"' '{print $10;}')
+#               echo "DEBUG: \$SECONDEMAIL is $SECONDEMAIL" >> $DEBUG
                 SECONDDATA=$(sed -n 1p "$SECSEMJUNK") 
 		SECONDREASONTIME=$(grep "$SECONDDATA" "$WEEKLY" | cut -d, -f9,11)
 		rm -rf "$SECSEMJUNK" 
 		SECONDFIRSTCOURSE=$(grep "$SECONDEMAIL" "$QUARTERLY" | grep "$CUTOFF" | sed -n 1p | cut -d, -f1,6)
+#               echo "DEBUG: \$FIRSTCOURSE is $FIRSTCOURSE" >> $DEBUG
 		SECONDSECONDCOURSE=$(grep "$SECONDEMAIL" "$QUARTERLY" | grep "$CUTOFF" | sed -n 2p | cut -d, -f1,6)
 		SECONDTHIRDCOURSE=$(grep "$SECONDEMAIL" "$QUARTERLY" | grep "$CUTOFF" | sed -n 3p | cut -d, -f1,6)
 		SECONDFOURTHCOURSE=$(grep "$SECONDEMAIL" "$QUARTERLY" | grep "$CUTOFF" | sed -n 4p | cut -d, -f1,6)
@@ -157,11 +178,13 @@ touch $STUJUNK
 STUDENTEMAIL=`(grep "@oapb.org" "$JUNKFILE")`
 for SoloEmail in $STUDENTEMAIL
 	do
+#		echo "DEBUG: \$SoloEmail is $SoloEmail" >> $DEBUG
 		VISITS=$(grep -c "$SoloEmail" "$WEEKLY")
 		TIMETOTAL=$(grep "$SoloEmail" "$WEEKLY" | awk -F'\"' '{print $4;}')
 		echo "$TIMETOTAL" >> $STUJUNK
 		HOURS=$(sed -n 1p $STUJUNK | awk -F':' '{print $1;}')
 		MINUTES=$(sed -n 1p $STUJUNK | awk -F':' '{print $2;}')
+#		echo "DEBUG: \$MINUTES is $MINUTES" >> $DEBUG
 		SECONDS=$(sed -n 1p $STUJUNK | awk -F':' '{print $3;}')
 		echo "$MINUTES" >> "$STUMINUTES"
 		TOTALMINUTES=$(paste -sd+ "$STUMINUTES" | bc)
@@ -207,6 +230,7 @@ for CourseCollected in $COURSESTWO
 }
 
 #Run Functions
+#echo "DEBUG: \$YEAR is $YEAR, \$STARTYEAR is $STARTYEAR" >> $DEBUG
 if [ $YEAR != $STARTYEAR ]
 	then
 		echo "####Starting Second Semester Function####" >> /var/log/$LOGFILE
