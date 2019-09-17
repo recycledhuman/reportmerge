@@ -34,12 +34,30 @@ Variables Used
 13. YEAR - Grabs the current year from the system
 14. CUTOFF - Sets the cutoff date for the start of the second semester for sorting purposes
 15. DATEMDY - pulls the month day and year of the current day to add to the end of the final documents allowing to easily search through the history of documents created
-16. FINAL - Path to the final document
-17. STUDENTFINAL - Path to the final student data document
-18. COURSEFINAL - Path to the final course data document
-19. SEMJUNK - Path to an interfunction document that is created and deleted
-20. SECSEMJUNK - Path to an interfunction document used in the second semester that is created and deleted
-21. JUNKFILE - Path to a interfunction document that is created and deleted
-22. COURSEJUNK - Path to an interfunction document that checks for duplicate data
-23. STARTYEAR - Sets the year of the first semester (change yearly)
-24. IFS - Determines how to use white space delimiters (set for these purposes to ignore spaces as new lines) * helpful with names and courses with multiple spaces
+16. STUMINUTES - Path to temporary hold for minutes file
+17. STUHOURS - Path to temporary hold for hours file
+18. FINAL - Path to the final document
+19. STUDENTFINAL - Path to the final student data document
+20. COURSEFINAL - Path to the final course data document
+21. SEMJUNK - Path to an interfunction document that is created and deleted
+22. SECSEMJUNK - Path to an interfunction document used in the second semester that is created and deleted
+23. JUNKFILE - Path to a interfunction document that is created and deleted
+24. COURSEJUNK - Path to an interfunction document that checks for duplicate data
+25. STUJUNK - Path to interfuction document that removes quotes from time
+26. STARTYEAR - Sets the year of the first semester (change yearly)
+27. IFS - Determines how to use white space delimiters (set for these purposes to ignore spaces as new lines) * helpful with names and courses with multiple spaces
+
+Locations for debugging
+1. getFirstSemWeeklyNames and GetSecondSemWeeklyNames
+  a. $ScannedName, $EMAIL, $FIRSTCOURSE
+2. getStudentData
+  a. $SoloEmail, $MINUTES
+3. if/then
+  a. $YEAR, $STARTYEAR
+  
+Comment out functions from under "Run Funtions" as needed
+Comment out hold data removal to provide a list of data to review
+
+Log the following data
+1. Documents present
+2. Start of which semester data
