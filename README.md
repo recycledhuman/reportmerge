@@ -1,24 +1,9 @@
 # reportmerge
-To combine data from two csv files into a third.
+I. Purpose: To combine data from two csv files into a third, to extract data from these files into a categories.
 
-Concept - create a txt file, load variables from static document for email - course - teacher, check each line of variable document against the emails in the variable field and combine the output to a third document, write the third document to a csv file and place on the desktop of the current logged in user.
+II. Method: Check for presense of needed documents, change permissions of e-hallpass document, run script to merge documents and create meaningful data from the results
 
-Thoughts: 
-1. Need to provide checks to confirm all needed documents exist
-  a. all needed documents are recent (?)
-  b. move a copy of the old file to an archive
-2. Set up log files
-  a. document if needed documents don't exist
-  b. document if files are not recent
-  c. document moves to archives
-3. Set up error reporting
-4. List of pitfalls so far encountered
-  a. spaces in names/courses create line breaks when read by grep into a variable
-  b. can be fixed by awking in "+" between each potential break
-    i. this looks really bad due to needing to convert twice with multiple new txt documents to hold it in place
-  c. experienced issue with randomly failing to run script - unsure as to cause
-  
-Variables Used
+A. Variables: 
 1. SCRIPT - sets script name and provides (may cut...not necessary can be merged with logfile)
 2. LOGFILE - sets name of the log file in use (useful for testing purposes to switch the name once the final product is in order)
 3. NOW - sets the current time (used several times for logging purposes - shows the timestamps of when events occurred)
@@ -45,19 +30,37 @@ Variables Used
 24. COURSEJUNK - Path to an interfunction document that checks for duplicate data
 25. STUJUNK - Path to interfuction document that removes quotes from time
 26. STARTYEAR - Sets the year of the first semester (change yearly)
-27. IFS - Determines how to use white space delimiters (set for these purposes to ignore spaces as new lines) * helpful with names and courses with multiple spaces
+27. DEBUG - path to debug file if debugging
+28. IFS - Determines how to use white space delimiters (set for these purposes to ignore spaces as new lines) * helpful with names and courses with multiple spaces
 
-Locations for debugging
-1. getFirstSemWeeklyNames and GetSecondSemWeeklyNames
-  a. $ScannedName, $EMAIL, $FIRSTCOURSE
-2. getStudentData
-  a. $SoloEmail, $MINUTES
-3. if/then
-  a. $YEAR, $STARTYEAR
+B. Used: Logfiles for troubleshooting, debug for troubleshooting, loops for creating temp documents and deleting them
+
+III. Script Outline: Set Variables, Adjust Permisions, Set up logs, Check for Documents, Create documents for holding data, Create hold documents for use in functions, Set Functions, Run Functions, Create Final Documents, Perform Cleanup
+
+IV. Takeaways: Learned to use text files to manage variables in loops, learned IFS and general tips for formatting like "" inside a greped variable can lead to problems, spaces can lead to problems etc. 
+
+V. Questions: What is the best method to provide a public readme?
+
+VI. Troubleshooting: 
+A. All Final documents are blank
+  1. Resolution: Ensure the required documents and folders are in the right place and have the right name
+    a. e-hallpass.csv is in ~/Desktop/reportmerge; courseandteacher.csv is in ~/Desktop/reportmerge
+    b. Final-Report folder is in ~/Desktop/reportmerge; Course-Data folder is in ~/Desktop/reportmerge; Student-Data folder is in ~/Desktop/reportmerge
   
-Comment out functions from under "Run Funtions" as needed
-Comment out hold data removal to provide a list of data to review
-
-Log the following data
-1. Documents present
-2. Start of which semester data
+B. Number of tickets in the e-hallpass.csv file do not match the number of tickets in the final document
+  1. Check that the logfiles show the correct semester function is in use, comment out incorrect semester function and run again
+    a. Go to /var/log/reportmerge.log in console or in finder and check the last known good logfile
+    b. If semester is incorrect, comment out incorrect semester in the if/then statement under "Run Functions" and try again
+    c. Turn on debugging to see why incorrect semester is being used and adjust accordingly
+      i. if the $STARTYEAR is incorrect set the correct one under "Set Variables"
+      ii. if the $YEAR has quotes remove the quotes
+  2. Pull up the csv in excel and check for duplicates under the second field
+    a. this will locate any students who have more than one math class a semster and may account for the difference
+    
+C. One or more students have blanks where their classrooms should be or don't show up at all
+  1. Check the courseandteacher.csv for the student and see if they have a class in the current semester
+    a. if they do not have a class they are ignored for the totalling of the student visits
+    
+Build in file size limiter
+Add script to folder for testing
+Set up folder for holding scratch data
