@@ -61,7 +61,3 @@ B. Number of tickets in the e-hallpass.csv file do not match the number of ticke
 C. One or more students have blanks where their classrooms should be or don't show up at all
   1. Check the courseandteacher.csv for the student and see if they have a class in the current semester
     a. if they do not have a class they are ignored for the totalling of the student visits
-    
-Build in file size limiter
-Add script to folder for testing
-Set up folder for holding scratch data
